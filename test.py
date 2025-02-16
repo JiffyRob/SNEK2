@@ -10,9 +10,7 @@ def main():
     scanner = Scanner(source)
     tokens = scanner.scan()
     parser = Parser(tokens)
-    expression = parser.parse()
-    printer = AstPrinter()
-    print(printer.print(expression))
+    expression = list(parser.parse())
     interpreter = Interpreter()
     interpreter.interpret(expression)
 

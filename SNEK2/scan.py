@@ -1,4 +1,4 @@
-from .common import TokenType, ErrorType, Token, log_error
+from .common import TokenType, ErrorType, Token, Error
 
 def is_alphanumeric_or_underscore(c):
     return c.isalnum() or c == "_"
@@ -39,8 +39,11 @@ class Scanner:
         return self.source[self.current - 1]
 
     def add_token(self, token_type, literal=None):
+        src = self.source[self.start:self.current]
+        if token_type == TokenType.EOF:
+            src = "<EOF>"
         self.tokens.append(
-            Token(token_type, self.source[self.start:self.current], literal, self.line)
+            Token(token_type, src, literal, self.line)
         )
 
     def match(self, expected):
@@ -50,6 +53,10 @@ class Scanner:
             return False
         self.current += 1
         return True
+    
+    def previous(self):
+        assert self.current > 0
+        return self.source[self.current - 1]
 
     def peek(self):
         return self.source[self.current]
@@ -66,8 +73,7 @@ class Scanner:
             self.advance()
 
         if self.is_at_end():
-            log_error(ErrorType.SCAN_ERROR, "Unterminated string", self.line)
-            return
+            raise Error(ErrorType.SCAN_ERROR, "Unterminated string", self.line)
 
         self.advance()
 
@@ -150,7 +156,7 @@ class Scanner:
             case _ if is_alpha_or_underscore(c):
                 self.handle_identifier()
             case _:
-                log_error(ErrorType.SCAN_ERROR, f"Unexpected character: {c}", self.line)
+                raise Error(ErrorType.SCAN_ERROR, self.previous(), "Unexpected character", self.line)
 
     def is_at_end(self):
         return self.current >= len(self.source)

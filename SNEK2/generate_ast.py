@@ -23,11 +23,17 @@ def define_ast(output_dir, basename, types):
             fields = [field.strip() for field in fields.split(",")]
             f.write(define_type(basename, class_name, fields))
     
-TYPES = [
+EXPR_TYPES = [
     "Binary : left, operator, right",
     "Grouping : expression",
     "Literal : value",
     "Unary : operator, right"
 ]
+
+STMT_TYPES = [
+    "Expression : expression",
+    "Print : expression",
+]
 if __name__ == "__main__":
-    define_ast("SNEK2", "Expression", TYPES)
+    define_ast("SNEK2", "Expression", EXPR_TYPES)
+    define_ast("SNEK2", "Statement", STMT_TYPES)

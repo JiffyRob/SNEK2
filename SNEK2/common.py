@@ -60,9 +60,8 @@ class ErrorType(Enum):
     PARSE_ERROR = "Parser Error"
     TYPE_ERROR = "Type Error"
 
-def log_error(type: ErrorType, message: str, line: int):
-    print(f"ERROR, line {line}\n{type.value}: {message}")
-    exit(1)
+def throw(error):
+    raise error
 
 
 @dataclass
@@ -80,4 +79,4 @@ class Error(Exception):
         self.message = message
 
     def __str__(self):
-        return f"{self.type.value} at line {self.token.line}\n{self.token.src}: \n{self.message}"
+        return f"{self.type.value} at line {self.token.line}\n{self.token.src}: {self.message}"

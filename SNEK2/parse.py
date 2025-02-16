@@ -1,5 +1,6 @@
-from .common import TokenType, ErrorType, Token, log_error, Error
+from .common import TokenType, ErrorType, Token, Error
 from .expression import Binary, Grouping, Literal, Unary
+from .statement import Print
 
 class Parser:
     def __init__(self, tokens):
@@ -7,7 +8,7 @@ class Parser:
         self.current = 0
 
     def is_at_end(self):
-        return self.current >= len(self.tokens)
+        return self.current >= len(self.tokens) - 1
 
     def peek(self):
         return self.tokens[self.current]
@@ -35,14 +36,10 @@ class Parser:
             
         return False
     
-    def error(self, token, message):
-        log_error(ErrorType.SCAN_ERROR, message, token.line)
-        return Error(ErrorType.SCAN_ERROR, token, message)
-    
     def consume(self, type, message):
         if self.check(type):
             return self.advance()
-        return self.error(self.peek(), message)
+        raise Error(ErrorType.PARSE_ERROR, self.peek(), message)
     
     def synchonize(self):
         self.advance()
@@ -52,6 +49,21 @@ class Parser:
             if self.peek().type in (TokenType.CLASS, TokenType.FUN, TokenType.VAR, TokenType.PRINT, TokenType.RETURN):
                 return
             self.advance()
+
+    def statement(self):
+        if self.match(TokenType.PRINT):
+            return self.print_statement()
+        return self.expression_statement()
+    
+    def expression_statement(self):
+        expr = self.expression()
+        self.consume(TokenType.SEMICOLON, "Expect ';' after value.")
+        return expr
+    
+    def print_statement(self):
+        expr = self.expression()
+        self.consume(TokenType.SEMICOLON, "Expect ';' after value.")
+        return Print(self.peek(), expr)
 
     def expression(self):
         return self.equality()
@@ -128,7 +140,5 @@ class Parser:
         raise Error(ErrorType.PARSE_ERROR, self.peek(), "Expect expression.")
     
     def parse(self):
-        try:
-            return self.expression()
-        except Error as e:
-            return e
+        while not self.is_at_end():
+            yield self.statement()

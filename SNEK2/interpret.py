@@ -1,4 +1,4 @@
-from .common import TokenType, ErrorType, Error, log_error
+from .common import TokenType, ErrorType, Error
 import operator
 
 class Interpreter:
@@ -25,6 +25,16 @@ class Interpreter:
 
     def evaluate(self, expr):
         return expr.accept(self)
+    
+    def execute(self, stmt):
+        stmt.accept(self)
+    
+    def visit_expression(self, stmt):
+        self.evaluate(stmt.expression)
+
+    def visit_print(self, stmt):
+        value = self.evaluate(stmt.expression)
+        print(f"SNEK LOG: {self.repr(value)}")
 
     def visit_literal(self, expr):
         return expr.value
@@ -67,9 +77,6 @@ class Interpreter:
             return "nil"
         return str(value)
             
-    def interpret(self, expr):
-        try:
-            value = self.evaluate(expr)
-            print(self.repr(value))
-        except Error as e:
-            log_error(e.type, e.message, e.token.line)
+    def interpret(self, statements):
+        for stmt in statements:
+            self.execute(stmt)
