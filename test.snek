@@ -1,0 +1,34 @@
+# wait(1000);
+num = 0;
+if num {
+    print("Look my num is True");
+}
+num = 1;
+print("num is", num);
+switch num {
+    case 0 {
+        print("x is 0");
+    }
+    case 1 * 0 - 20 + 21 {
+        print("x is 1");
+    }
+    case 2 {
+        print("x is 2");
+        print("Two is my favorite color!");
+    }
+    case 3 {
+        print("x is three!");
+    }
+    case 4 {
+        print("x is 4");
+    }
+    case 5 {
+        print("boogyeyklfajdfajklasf");
+    }
+}
+
+i = 0;
+while i < 10 {
+    i = i + 1;
+    print(i);
+}
