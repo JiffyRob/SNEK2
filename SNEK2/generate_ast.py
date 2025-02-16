@@ -1,4 +1,5 @@
 def define_type(basename, class_name, fields):
+    fields.insert(0, "token")
     string = f"class {class_name}({basename}):"
     string += f"\n    def __init__(self, {', '.join(fields)}):"
     for field in fields:
@@ -29,4 +30,4 @@ TYPES = [
     "Unary : operator, right"
 ]
 if __name__ == "__main__":
-    define_ast(".", "Expression", TYPES)
+    define_ast("SNEK2", "Expression", TYPES)

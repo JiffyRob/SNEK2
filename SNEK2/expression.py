@@ -4,7 +4,8 @@ class Expression:
     pass
 
 class Binary(Expression):
-    def __init__(self, left, operator, right):
+    def __init__(self, token, left, operator, right):
+        self.token = token
         self.left = left
         self.operator = operator
         self.right = right
@@ -13,21 +14,24 @@ class Binary(Expression):
         return visitor.visit_binary(self)
 
 class Grouping(Expression):
-    def __init__(self, expression):
+    def __init__(self, token, expression):
+        self.token = token
         self.expression = expression
 
     def accept(self, visitor):
         return visitor.visit_grouping(self)
 
 class Literal(Expression):
-    def __init__(self, value):
+    def __init__(self, token, value):
+        self.token = token
         self.value = value
 
     def accept(self, visitor):
         return visitor.visit_literal(self)
 
 class Unary(Expression):
-    def __init__(self, operator, right):
+    def __init__(self, token, operator, right):
+        self.token = token
         self.operator = operator
         self.right = right
 

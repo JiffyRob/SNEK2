@@ -58,66 +58,72 @@ class Parser:
     
     def equality(self):
         expr = self.comparison()
+        token = self.peek()
 
         while self.match(TokenType.BANG_EQUAL, TokenType.EQUAL_EQUAL):
             operator = self.previous()
             right = self.comparison()
-            expr = Binary(expr, operator, right)
+            expr = Binary(token, expr, operator, right)
 
         return expr
     
     def comparison(self):
         expr = self.term()
+        token = self.peek()
 
         while self.match(TokenType.GREATER, TokenType.GREATER_EQUAL, TokenType.LESS, TokenType.LESS_EQUAL):
             operator = self.previous()
             right = self.term()
-            expr = Binary(expr, operator, right)
+            expr = Binary(token, expr, operator, right)
 
         return expr
     
     def term(self):
         expr = self.factor()
+        token = self.peek()
 
         while self.match(TokenType.MINUS, TokenType.PLUS):
             operator = self.previous()
             right = self.factor()
-            expr = Binary(expr, operator, right)
+            expr = Binary(token, expr, operator, right)
 
         return expr
 
     def factor(self):
         expr = self.unary()
+        token = self.peek()
 
         while self.match(TokenType.SLASH, TokenType.STAR):
             operator = self.previous()
             right = self.unary()
-            expr = Binary(expr, operator, right)
+            expr = Binary(token, expr, operator, right)
 
         return expr
     
     def unary(self):
+        token = self.peek()
         if self.match(TokenType.BANG, TokenType.MINUS):
             operator = self.previous()
             right = self.unary()
 
-            return Unary(operator, right)
+            return Unary(token, operator, right)
         
         return self.primary()
         
     def primary(self):
+        token = self.peek()
         if self.match(TokenType.TRUE):
-            return Literal(True)
+            return Literal(token, True)
         if self.match(TokenType.FALSE):
-            return Literal(False)
+            return Literal(token, False)
         if self.match(TokenType.NIL):
-            return Literal(None)
+            return Literal(token, None)
         if self.match(TokenType.NUMBER, TokenType.STRING):
-            return Literal(self.previous().literal)
+            return Literal(token, self.previous().literal)
         if self.match(TokenType.LEFT_PAREN):
             expr = self.expression()
             self.consume(TokenType.RIGHT_PAREN, "Expect ')' after expression.")
-            return Grouping(expr)
+            return Grouping(token, expr)
         
         raise Error(ErrorType.PARSE_ERROR, self.peek(), "Expect expression.")
     

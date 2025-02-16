@@ -58,6 +58,7 @@ class TokenType(Enum):
 class ErrorType(Enum):
     SCAN_ERROR = "Scanner Error"
     PARSE_ERROR = "Parser Error"
+    TYPE_ERROR = "Type Error"
 
 def log_error(type: ErrorType, message: str, line: int):
     print(f"ERROR, line {line}\n{type.value}: {message}")
