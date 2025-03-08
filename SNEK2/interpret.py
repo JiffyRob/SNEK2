@@ -52,6 +52,12 @@ class Interpreter:
         while self.is_truthy(stmt.condition):
             self.execute(stmt.body)
 
+    def visit_switch(self, stmt):
+        switch_value = self.evaluate(stmt.expr)
+        for case_value, case_body in stmt.cases:
+            if self.evaluate(case_value) == switch_value:
+                self.execute(case_body)
+
     def visit_print(self, stmt):
         value = self.evaluate(stmt.expression)
         print(f"SNEK LOG: {self.repr(value)}")

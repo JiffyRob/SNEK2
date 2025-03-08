@@ -1,58 +1,60 @@
-from enum import Enum
+from enum import Enum, auto
 from dataclasses import dataclass
 
 class TokenType(Enum):
     # single character
-    LEFT_PAREN = 0
-    RIGHT_PAREN = 1
-    LEFT_BRACE = 2
-    RIGHT_BRACE = 3
-    COMMA = 4
-    DOT = 5
-    MINUS = 6
-    PLUS = 7
-    SEMICOLON = 8
-    SLASH = 9
-    STAR = 10
+    LEFT_PAREN = auto()
+    RIGHT_PAREN = auto()
+    LEFT_BRACE = auto()
+    RIGHT_BRACE = auto()
+    COMMA = auto()
+    DOT = auto()
+    MINUS = auto()
+    PLUS = auto()
+    SEMICOLON = auto()
+    SLASH = auto()
+    STAR = auto()
 
     # one or two character tokens
-    BANG = 11
-    BANG_EQUAL = 12
-    EQUAL = 13
-    EQUAL_EQUAL = 14
-    GREATER = 15
-    GREATER_EQUAL = 16
-    LESS = 17
-    LESS_EQUAL = 18
+    BANG = auto()
+    BANG_EQUAL = auto()
+    EQUAL = auto()
+    EQUAL_EQUAL = auto()
+    GREATER = auto()
+    GREATER_EQUAL = auto()
+    LESS = auto()
+    LESS_EQUAL = auto()
 
     # literals
-    IDENTIFIER = 19
-    STRING = 20
-    NUMBER = 21
+    IDENTIFIER = auto()
+    STRING = auto()
+    NUMBER = auto()
 
     # keywords
-    AND = 22
-    CLASS = 23
-    ELSE = 24
-    FALSE = 25
-    FUN = 26
-    FOR = 27
-    IF = 28
-    NIL = 29
-    OR = 30
-    PRINT = 31
-    RETURN = 32
-    SUPER = 33
-    THIS = 34
-    TRUE = 35
-    VAR = 36
-    WHILE = 37
+    AND = auto()
+    CLASS = auto()
+    ELSE = auto()
+    FALSE = auto()
+    FUN = auto()
+    FOR = auto()
+    IF = auto()
+    NIL = auto()
+    OR = auto()
+    PRINT = auto()
+    RETURN = auto()
+    SUPER = auto()
+    THIS = auto()
+    TRUE = auto()
+    VAR = auto()
+    WHILE = auto()
+    SWITCH = auto()
+    CASE = auto()
     
     # EOF
-    EOF = 38
+    EOF = auto()
 
     # Line number
-    LINE = 39
+    LINE = auto()
 
 
 class ErrorType(Enum):

@@ -25,6 +25,8 @@ class Scanner:
         "true": TokenType.TRUE,
         "var": TokenType.VAR,
         "while": TokenType.WHILE,
+        "switch": TokenType.SWITCH,
+        "case": TokenType.CASE,
     }
 
     def __init__(self, source):

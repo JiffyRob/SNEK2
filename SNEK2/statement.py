@@ -55,3 +55,12 @@ class Block(Statement):
     def accept(self, visitor):
         return visitor.visit_block(self)
 
+class Switch(Statement):
+    def __init__(self, token, expr, cases):
+        self.token = token
+        self.expr = expr
+        self.cases = cases
+
+    def accept(self, visitor):
+        return visitor.visit_switch(self)
+

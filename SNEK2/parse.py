@@ -1,6 +1,6 @@
 from .common import TokenType, ErrorType, Token, Error
 from .expression import Binary, Grouping, Literal, Unary, Identifier, Assign, Logical
-from .statement import Print, Var, Block, If, While
+from .statement import Print, Var, Block, If, While, Switch
 
 class Parser:
     def __init__(self, tokens):
@@ -59,6 +59,8 @@ class Parser:
             return self.print_statement()
         if self.match(TokenType.WHILE):
             return self.while_statement()
+        if self.match(TokenType.SWITCH):
+            return self.switch_statement()
         if self.match(TokenType.LEFT_BRACE):
             return self.block()
         return self.expression_statement()
@@ -82,6 +84,20 @@ class Parser:
         body = self.statement()
 
         return While(condition, condition, body)
+    
+    def switch_statement(self):
+        expr = self.expression()
+        self.consume(TokenType.LEFT_BRACE, "Switch statement must start a new block")
+
+        cases = []
+
+        while not self.match(TokenType.RIGHT_BRACE):
+            self.consume(TokenType.CASE, "Must only have cases inside switch statement")
+            case_expr = self.expression()
+            case_body = self.statement()
+            cases.append((case_expr, case_body))
+
+        return Switch(expr, expr, cases)
     
     def expression_statement(self):
         expr = self.expression()
@@ -208,7 +224,7 @@ class Parser:
         
         return self.primary()
         
-    def primary(self):
+    def primary(self, const=False):
         token = self.peek()
         if self.match(TokenType.TRUE):
             return Literal(token, True)
@@ -218,12 +234,13 @@ class Parser:
             return Literal(token, None)
         if self.match(TokenType.NUMBER, TokenType.STRING):
             return Literal(token, self.previous().literal)
-        if self.match(TokenType.LEFT_PAREN):
-            expr = self.expression()
-            self.consume(TokenType.RIGHT_PAREN, "Expect ')' after expression.")
-            return Grouping(token, expr)
-        if self.match(TokenType.IDENTIFIER):
-            return Identifier(token, self.previous())
+        if not const:
+            if self.match(TokenType.LEFT_PAREN):
+                expr = self.expression()
+                self.consume(TokenType.RIGHT_PAREN, "Expect ')' after expression.")
+                return Grouping(token, expr)
+            if self.match(TokenType.IDENTIFIER):
+                return Identifier(token, self.previous())
         
         raise Error(ErrorType.PARSE_ERROR, self.peek(), "Expect expression.")
     

@@ -40,6 +40,7 @@ STMT_TYPES = [
     "Var : name, initializer",
     "While : condition, body",
     "Block : statements",
+    "Switch : expr, cases",
 ]
 if __name__ == "__main__":
     define_ast("SNEK2", "Expression", EXPR_TYPES)
