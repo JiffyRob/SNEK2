@@ -24,7 +24,7 @@ sleep_for(3);
 """
 
 def main():
-    program = SNEKProgram({
+    program = SNEKProgram(script, {
         "my_callback": SNEKCallback(my_callback, 0),  # second arg is how many arguments to take.  No kwd or variable length args.
         "sleep_for": AsyncSNEKCallback(sleep_for, 1),
     })
