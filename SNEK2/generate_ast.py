@@ -37,7 +37,6 @@ STMT_TYPES = [
     "Expression : expression",
     "Print : expression",
     "If : condition, if_branch, else_branch",
-    "Var : name, initializer",
     "While : condition, body",
     "Block : statements",
     "Switch : expr, cases",

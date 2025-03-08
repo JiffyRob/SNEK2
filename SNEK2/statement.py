@@ -29,15 +29,6 @@ class If(Statement):
     def accept(self, visitor):
         return visitor.visit_if(self)
 
-class Var(Statement):
-    def __init__(self, token, name, initializer):
-        self.token = token
-        self.name = name
-        self.initializer = initializer
-
-    def accept(self, visitor):
-        return visitor.visit_var(self)
-
 class While(Statement):
     def __init__(self, token, condition, body):
         self.token = token

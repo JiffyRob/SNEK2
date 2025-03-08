@@ -62,13 +62,6 @@ class Interpreter:
         value = self.evaluate(stmt.expression)
         print(f"SNEK LOG: {self.repr(value)}")
 
-    def visit_var(self, stmt):
-        if stmt.initializer is not None:
-            value = self.evaluate(stmt.initializer)
-        else:
-            value = None
-        self.env.define(stmt.name, value)
-
     def visit_block(self, stmt):
         self.execute_block(stmt.statements, environment.Environment(self.env))
 

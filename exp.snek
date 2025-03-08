@@ -7,8 +7,9 @@ if (0) {
     print "untruth.";
 }
 
-var a = 1;
+a = 1;
 
+if true a = 0;
 
 switch a {
     case 0 print "a is 0";

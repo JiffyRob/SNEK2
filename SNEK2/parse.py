@@ -1,6 +1,6 @@
 from .common import TokenType, ErrorType, Token, Error
 from .expression import Binary, Grouping, Literal, Unary, Identifier, Assign, Logical
-from .statement import Print, Var, Block, If, While, Switch
+from .statement import Print, Block, If, While, Switch
 
 class Parser:
     def __init__(self, tokens):
@@ -48,7 +48,7 @@ class Parser:
         while not self.is_at_end():
             if self.previous().type == TokenType.SEMICOLON:
                 return
-            if self.peek().type in (TokenType.CLASS, TokenType.FUN, TokenType.VAR, TokenType.PRINT, TokenType.RETURN):
+            if self.peek().type in (TokenType.WHILE, TokenType.IF, TokenType.ELSE, TokenType.PRINT, TokenType.RETURN):
                 return
             self.advance()
 
@@ -113,18 +113,8 @@ class Parser:
         self.consume(TokenType.SEMICOLON, "Expect ';' after value.")
         return Print(self.peek(), expr)
     
-    def var_declaration(self):
-        token = self.consume(TokenType.IDENTIFIER, "Expect variable name.")
-        initializer = None
-        if self.match(TokenType.EQUAL):
-            initializer = self.expression()
-        self.consume(TokenType.SEMICOLON, "Expect ';' after variable declaration.")
-        return Var(token, token, initializer)
-    
     def declaration(self):
         try:
-            if self.match(TokenType.VAR):
-                return self.var_declaration()
             return self.statement()
         except Error as e:
             print(e)
