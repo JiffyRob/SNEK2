@@ -3,8 +3,13 @@ class SNEKCallable:
         self.func = func
         self._arity = arity
 
-    def call(self, interpreter, args):
+    async def call(self, interpreter, args):
         return self.func(*args)
     
     def arity(self):
         return self._arity
+    
+
+class AsyncSNEKCallable(SNEKCallable):
+    async def call(self, interpreter, args):
+        return await self.func(*args)

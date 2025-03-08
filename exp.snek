@@ -1,6 +1,11 @@
 # comment
 print(2 + 2);
 
+print "waiting";
+print get_test();
+wait(1);
+print ("done");
+
 if (0) {
     print "truth!";
 } else {
@@ -13,6 +18,8 @@ a = 1;
 # declares a in global scope
 if true then a = 0;
 
+print "single line stmt handled";
+
 # multi line if statement
 # declares a in block scope
 if true {
@@ -24,6 +31,8 @@ if true then {
     a = 2;
 }
 
+print "ifs done";
+
 switch a {  # braces here are mandatory
     # single line case statement
     case 0 do print "a is 0";
@@ -34,6 +43,8 @@ switch a {  # braces here are mandatory
         print("a is 10!");
     }
 }
+
+print "switch done";
 
 print f"Let's roll a d20! {randint(1, 20)}";
 barf();

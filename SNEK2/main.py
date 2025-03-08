@@ -1,3 +1,4 @@
+import asyncio
 from functools import lru_cache
 
 from .scan import Scanner
@@ -17,5 +18,5 @@ class SNEKProgram:
         scanner = Scanner(src)
         return tuple(Parser(scanner.scan()).parse())
 
-    def run(self):
-        Interpreter(self.api).interpret(self.program)
+    async def run(self):
+        await Interpreter(self.api).interpret(self.program)
