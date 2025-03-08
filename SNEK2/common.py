@@ -59,6 +59,10 @@ class ErrorType(Enum):
     SCAN_ERROR = "Scanner Error"
     PARSE_ERROR = "Parser Error"
     TYPE_ERROR = "Type Error"
+    RUNTIME_ERROR = "Runtime Error"
+    REDECLARED_VARIABLE_ERROR = "Redeclared Variable Error"
+    UNBOUND_VARIABLE_ERROR = "Unbound Variable Error"
+
 
 def throw(error):
     raise error
@@ -79,4 +83,4 @@ class Error(Exception):
         self.message = message
 
     def __str__(self):
-        return f"{self.type.value} at line {self.token.line}\n{self.token.src}: {self.message}"
+        return f"{self.type.value} at line {self.token.line} (\"{self.token.src}\"):\n{self.message}"

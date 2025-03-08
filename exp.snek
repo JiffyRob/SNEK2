@@ -1,4 +1,15 @@
 # comment
-print (2 + 2) * 6 / 4;
+print (2 + 2);
 
-print(4 + 4);
+if (0) {
+    print "truth!";
+} else {
+    print "untruth.";
+}
+
+var a = 10;
+
+while (a) {
+    a = a - 1;
+    print a;
+}

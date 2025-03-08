@@ -27,12 +27,19 @@ EXPR_TYPES = [
     "Binary : left, operator, right",
     "Grouping : expression",
     "Literal : value",
-    "Unary : operator, right"
+    "Logical : left, operator, right",
+    "Unary : operator, right",
+    "Identifier : name",
+    "Assign: name, value",
 ]
 
 STMT_TYPES = [
     "Expression : expression",
     "Print : expression",
+    "If : condition, if_branch, else_branch",
+    "Var : name, initializer",
+    "While : condition, body",
+    "Block : statements",
 ]
 if __name__ == "__main__":
     define_ast("SNEK2", "Expression", EXPR_TYPES)

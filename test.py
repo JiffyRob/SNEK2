@@ -11,6 +11,7 @@ def main():
     tokens = scanner.scan()
     parser = Parser(tokens)
     expression = list(parser.parse())
+    print(expression)
     interpreter = Interpreter()
     interpreter.interpret(expression)
 
