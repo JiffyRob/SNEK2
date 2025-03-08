@@ -22,7 +22,7 @@ class Interpreter:
             "input": SNEKCallable(input, 1),
             "contains": SNEKCallable(lambda x, y: x in y, 2),
             "abs": SNEKCallable(abs, 1),
-            "wait": AsyncSNEKCallable(asyncio.sleep, 1),
+            "wait": AsyncSNEKCallable(lambda x: asyncio.sleep(x / 1000), 1),
             **api,
         }
 

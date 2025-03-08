@@ -18,5 +18,8 @@ class SNEKProgram:
         scanner = Scanner(src)
         return tuple(Parser(scanner.scan()).parse())
 
-    async def run(self):
+    def run(self):
+        asyncio.run(Interpreter(self.api).interpret(self.program))
+
+    async def run_async(self):
         await Interpreter(self.api).interpret(self.program)

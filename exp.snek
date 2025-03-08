@@ -3,7 +3,7 @@ print(2 + 2);
 
 print "waiting";
 print get_test();
-wait(1);
+wait(250);
 print ("done");
 
 if (0) {
@@ -19,6 +19,8 @@ a = 1;
 if true then a = 0;
 
 print "single line stmt handled";
+
+wait(250);
 
 # multi line if statement
 # declares a in block scope
