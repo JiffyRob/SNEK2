@@ -4,7 +4,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "SNEK2"
+description = "The Super NPC/Event Koordinator 2"
+readme = "README.md"
+requires-python = ">=3.11"
+license  = {text = "MIT"}
+
 version = "2.0.0"
+dependencies = [
+    "importlib-metadata; python_version>=3.11",
+]
 
 [tool.setuptools.packages.find]
-where = ["./SNEK2"]
+where = ["SNEK2"]
