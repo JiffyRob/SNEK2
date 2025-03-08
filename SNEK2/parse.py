@@ -66,9 +66,7 @@ class Parser:
         return self.expression_statement()
     
     def if_statement(self):
-        self.consume(TokenType.LEFT_PAREN, "Expect '(' after if")
         condition = self.expression()
-        self.consume(TokenType.RIGHT_PAREN, "Expect ')' after if condition")
 
         if_branch = self.statement()
         else_branch = None
@@ -78,9 +76,7 @@ class Parser:
         return If(condition, condition, if_branch, else_branch)
     
     def while_statement(self):
-        self.consume(TokenType.LEFT_PAREN, "Expect '(' after while")
         condition = self.expression()
-        self.consume(TokenType.RIGHT_PAREN, "Expect ')' after expression")
         body = self.statement()
 
         return While(condition, condition, body)
