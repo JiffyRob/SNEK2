@@ -6,20 +6,29 @@ from . import environment
 import operator
 from time import time
 from random import randint
-from io import StringIO
 
 class Interpreter:
-    def __init__(self):
+    def __init__(self, api=None):
+        if api is None:
+            api = {}
+        
+        api = {
+            "time": SNEKCallable(time, 0),
+            "str": SNEKCallable(str, 1),
+            "upper": SNEKCallable(lambda x: x.upper(), 1),
+            "lower": SNEKCallable(lambda x: x.lower(), 1),
+            "title": SNEKCallable(lambda x: x.title(), 1),
+            "randint": SNEKCallable(randint, 2),
+            "input": SNEKCallable(input, 1),
+            "contains": SNEKCallable(lambda x, y: x in y, 2),
+            "abs": SNEKCallable(abs, 1),
+            **api,
+        }
+
         self.env = self.globals = environment.Environment()
-        self.globals.assign("time", SNEKCallable(time, 0))
-        self.globals.assign("str", SNEKCallable(str, 1))
-        self.globals.assign("upper", SNEKCallable(lambda x: x.upper(), 1))
-        self.globals.assign("lower", SNEKCallable(lambda x: x.lower(), 1))
-        self.globals.assign("title", SNEKCallable(lambda x: x.title(), 1))
-        self.globals.assign("randint", SNEKCallable(randint, 2))
-        self.globals.assign("input", SNEKCallable(input, 1))
-        self.globals.assign("contains", SNEKCallable(lambda x, y: x in y, 1))
-        self.globals.assign("abs", SNEKCallable(lambda x, y: x in y, 1))
+
+        for name, callable in api.items():
+            self.globals.assign(name, callable)
 
     def is_truthy(self, value):
         return bool(self.evaluate(value))

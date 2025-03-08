@@ -1,18 +1,13 @@
-from SNEK2.scan import Scanner
-from SNEK2.parse import Parser
-from SNEK2.ast_printer import AstPrinter
-from SNEK2.interpret import Interpreter
+from SNEK2 import SNEKCallable, SNEKProgram
 
 def main():
     with open("exp.snek") as f:
         source = f.read()
     
-    scanner = Scanner(source)
-    tokens = scanner.scan()
-    parser = Parser(tokens)
-    expression = list(parser.parse())
-    interpreter = Interpreter()
-    interpreter.interpret(expression)
+    program = SNEKProgram(source, {
+        "barf": SNEKCallable(lambda: print("Eww, I just barfed!"), 0)
+    })
+    program.run()
 
 
 if __name__ == "__main__":
