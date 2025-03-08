@@ -1,5 +1,5 @@
 # comment
-print (2 + 2);
+print(2 + 2);
 
 if (0) {
     print "truth!";
@@ -9,10 +9,27 @@ if (0) {
 
 a = 1;
 
-if true a = 0;
+# single line if statement
+# declares a in global scope
+if true then a = 0;
 
-switch a {
-    case 0 print "a is 0";
+# multi line if statement
+# declares a in block scope
+if true {
+    a = 1;
+}
+
+# this also works like the second, but why would you do this?
+if true then {
+    a = 2;
+}
+
+# this does not work
+if true a = 2;
+
+switch a {  # braces here are mandatory
+    # single line case statement
+    case 0 do print "a is 0";
     case 1 {
         print("a is 1, in a block");
     }

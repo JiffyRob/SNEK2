@@ -10,7 +10,9 @@ class Scanner:
     _cache = {}
     KEYWORDS = {
         "and": TokenType.AND,
+        "case": TokenType.CASE,
         # "class": TokenType.CLASS,
+        "do": TokenType.DO,
         "else": TokenType.ELSE,
         "false": TokenType.FALSE,
         # "for": TokenType.FOR,
@@ -19,14 +21,14 @@ class Scanner:
         "nil": TokenType.NIL,
         "or": TokenType.OR,
         "print": TokenType.PRINT,
-        "return": TokenType.RETURN,
-        "super": TokenType.SUPER,
+        # "return": TokenType.RETURN,
+        # "super": TokenType.SUPER,
+        "switch": TokenType.SWITCH,
+        "then": TokenType.THEN,
         # "this": TokenType.THIS,
         "true": TokenType.TRUE,
         "var": TokenType.VAR,
         "while": TokenType.WHILE,
-        "switch": TokenType.SWITCH,
-        "case": TokenType.CASE,
     }
 
     def __init__(self, source):
@@ -158,7 +160,7 @@ class Scanner:
             case _ if is_alpha_or_underscore(c):
                 self.handle_identifier()
             case _:
-                raise Error(ErrorType.SCAN_ERROR, self.previous(), "Unexpected character", self.line)
+                raise Error(ErrorType.SCAN_ERROR, self.previous(), "Unexpected character")
 
     def is_at_end(self):
         return self.current >= len(self.source)

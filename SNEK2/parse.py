@@ -48,7 +48,7 @@ class Parser:
         while not self.is_at_end():
             if self.previous().type == TokenType.SEMICOLON:
                 return
-            if self.peek().type in (TokenType.WHILE, TokenType.IF, TokenType.ELSE, TokenType.PRINT, TokenType.RETURN):
+            if self.peek().type in (TokenType.WHILE, TokenType.IF, TokenType.ELSE, TokenType.PRINT):
                 return
             self.advance()
 
@@ -67,7 +67,8 @@ class Parser:
     
     def if_statement(self):
         condition = self.expression()
-
+        if not self.check(TokenType.LEFT_BRACE):
+            self.consume(TokenType.THEN, "Expected either block statement or 'then'")
         if_branch = self.statement()
         else_branch = None
         if self.match(TokenType.ELSE):
@@ -77,6 +78,8 @@ class Parser:
     
     def while_statement(self):
         condition = self.expression()
+        if not self.check(TokenType.LEFT_BRACE):
+            self.consume(TokenType.DO, "Expected either block statement or 'do'")
         body = self.statement()
 
         return While(condition, condition, body)
@@ -90,6 +93,8 @@ class Parser:
         while not self.match(TokenType.RIGHT_BRACE):
             self.consume(TokenType.CASE, "Must only have cases inside switch statement")
             case_expr = self.expression()
+            if not self.check(TokenType.LEFT_BRACE):
+                self.consume(TokenType.DO, "Expected either block statement or 'do'")
             case_body = self.statement()
             cases.append((case_expr, case_body))
 
