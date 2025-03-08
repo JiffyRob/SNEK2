@@ -9,9 +9,9 @@ def main():
     
     scanner = Scanner(source)
     tokens = scanner.scan()
+    [print(i) for i in tokens]
     parser = Parser(tokens)
     expression = list(parser.parse())
-    print(expression)
     interpreter = Interpreter()
     interpreter.interpret(expression)
 

@@ -28,6 +28,10 @@ class TokenType(Enum):
     # literals
     IDENTIFIER = auto()
     STRING = auto()
+    FSTRING = auto()
+    FSTRING_PART = auto()
+    FSTRING_EXPR = auto()
+    FSTRING_END = auto()
     NUMBER = auto()
 
     # keywords
@@ -87,4 +91,10 @@ class Error(Exception):
         self.message = message
 
     def __str__(self):
-        return f"{self.type.value} at line {self.token.line} (\"{self.token.src}\"):\n{self.message}"
+        if isinstance(self.token, Token):
+            src = self.token.src
+            line = self.token.line
+        else:
+            src = self.token
+            line = self.message
+        return f"{self.type.value} at line {line} (\"{src}\"):\n{self.message}"

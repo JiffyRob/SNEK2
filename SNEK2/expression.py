@@ -39,6 +39,14 @@ class Literal(Expression):
     def accept(self, visitor):
         return visitor.visit_literal(self)
 
+class FString(Expression):
+    def __init__(self, token, value):
+        self.token = token
+        self.value = value
+
+    def accept(self, visitor):
+        return visitor.visit_fstring(self)
+
 class Logical(Expression):
     def __init__(self, token, left, operator, right):
         self.token = token

@@ -1,5 +1,5 @@
 from .common import TokenType, ErrorType, Token, Error
-from .expression import Binary, Grouping, Literal, Unary, Identifier, Assign, Logical, Call
+from .expression import Binary, Grouping, Literal, Unary, Identifier, Assign, Logical, Call, FString
 from .statement import Print, Block, If, While, Switch
 
 class Parser:
@@ -243,6 +243,8 @@ class Parser:
             return Literal(token, None)
         if self.match(TokenType.NUMBER, TokenType.STRING):
             return Literal(token, self.previous().literal)
+        if self.match(TokenType.FSTRING):
+            return self.desugar_fstring(token)
         if not const:
             if self.match(TokenType.LEFT_PAREN):
                 expr = self.expression()
@@ -253,6 +255,24 @@ class Parser:
         
         raise Error(ErrorType.PARSE_ERROR, self.peek(), "Expect expression.")
     
+    def desugar_fstring(self, token):
+        print("desugar")
+        expressions = []
+        while not self.check(TokenType.FSTRING_END):
+            current_token = self.peek()
+            print(current_token)
+            if current_token.type == TokenType.FSTRING_PART:
+                self.advance()
+                expressions.append(Literal(current_token, current_token.literal))
+            else:
+                expressions.append(self.expression())
+        self.advance()
+        expr = expressions.pop(0)
+        for term in expressions:
+            expr = Binary(term.token, expr, Token(TokenType.PLUS, "", None, None), Call(term.token, Identifier(term.token, Token(TokenType.IDENTIFIER, "str", "str", None)), None, [term]))
+
+        return expr
+    
     def parse(self):
         tokens = []
         while not self.is_at_end():
@@ -260,3 +280,10 @@ class Parser:
         if not self.valid:
             return []
         return tokens
+    
+    def parse_expression(self):
+        expr = self.expression()
+        if not self.is_at_end():
+            raise Error(ErrorType.PARSE_ERROR, self.advance(), "Expected 1 expression and nothing more")
+        
+        return expr

@@ -1,9 +1,12 @@
 from .common import TokenType, ErrorType, Error
+from .scan import Scanner
+from .parse import Parser
 from .api import SNEKCallable
 from . import environment
 import operator
 from time import time
 from random import randint
+from io import StringIO
 
 class Interpreter:
     def __init__(self):
@@ -78,8 +81,8 @@ class Interpreter:
         self.execute_block(stmt.statements, environment.Environment(self.env))
 
     def visit_literal(self, expr):
-        return expr.value
-    
+        return expr.value        
+
     def visit_logical(self, expr):
         left = self.evaluate(expr.left)
 
