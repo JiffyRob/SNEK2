@@ -2,6 +2,7 @@
 ## The Super NPC / Event Koordinator 2
 
 This is a programming language I wrote for cutscene management with pygame (though it could be used for other things).
+It has no dependencies save for the python standard library.
 
 It uses `asyncio` under the hood so that commands can take multiple frames to run without stopping the game.
 [Cool book that helped me a lot](https://craftinginterpreters.com)
