@@ -13,6 +13,16 @@ class Binary(Expression):
     def accept(self, visitor):
         return visitor.visit_binary(self)
 
+class Call(Expression):
+    def __init__(self, token, callee, paren, arguments):
+        self.token = token
+        self.callee = callee
+        self.paren = paren
+        self.arguments = arguments
+
+    def accept(self, visitor):
+        return visitor.visit_call(self)
+
 class Grouping(Expression):
     def __init__(self, token, expression):
         self.token = token

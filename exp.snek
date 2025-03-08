@@ -24,9 +24,6 @@ if true then {
     a = 2;
 }
 
-# this does not work
-if true a = 2;
-
 switch a {  # braces here are mandatory
     # single line case statement
     case 0 do print "a is 0";
@@ -37,3 +34,5 @@ switch a {  # braces here are mandatory
         print("a is 10!");
     }
 }
+
+print randint(0, 4);

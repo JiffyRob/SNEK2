@@ -1,5 +1,5 @@
 from .common import TokenType, ErrorType, Token, Error
-from .expression import Binary, Grouping, Literal, Unary, Identifier, Assign, Logical
+from .expression import Binary, Grouping, Literal, Unary, Identifier, Assign, Logical, Call
 from .statement import Print, Block, If, While, Switch
 
 class Parser:
@@ -213,7 +213,25 @@ class Parser:
 
             return Unary(token, operator, right)
         
-        return self.primary()
+        return self.call()
+    
+    def call(self):
+        expr = self.primary()
+
+        while self.match(TokenType.LEFT_PAREN):
+            expr = self.finish_call(expr)
+
+        return expr
+
+    def finish_call(self, callee):
+        arguments = []
+        if not self.check(TokenType.RIGHT_PAREN):
+            arguments.append(self.expression())
+            while self.match(TokenType.COMMA):
+                arguments.append(self.expression())
+        paren = self.consume(TokenType.RIGHT_PAREN, "Expect ')' after function call arguments")
+
+        return Call(callee, callee, paren, arguments)
         
     def primary(self, const=False):
         token = self.peek()

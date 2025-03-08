@@ -1,10 +1,22 @@
 from .common import TokenType, ErrorType, Error
+from .api import SNEKCallable
 from . import environment
 import operator
+from time import time
+from random import randint
 
 class Interpreter:
     def __init__(self):
-        self.env = environment.Environment()
+        self.env = self.globals = environment.Environment()
+        self.globals.assign("time", SNEKCallable(time, 0))
+        self.globals.assign("str", SNEKCallable(str, 1))
+        self.globals.assign("upper", SNEKCallable(lambda x: x.upper(), 1))
+        self.globals.assign("lower", SNEKCallable(lambda x: x.lower(), 1))
+        self.globals.assign("title", SNEKCallable(lambda x: x.title(), 1))
+        self.globals.assign("randint", SNEKCallable(randint, 2))
+        self.globals.assign("input", SNEKCallable(input, 1))
+        self.globals.assign("contains", SNEKCallable(lambda x, y: x in y, 1))
+        self.globals.assign("abs", SNEKCallable(lambda x, y: x in y, 1))
 
     def is_truthy(self, value):
         return bool(self.evaluate(value))
@@ -113,12 +125,23 @@ class Interpreter:
             case TokenType.EQUAL_EQUAL:
                 return self.operate_binary(expr, operator.eq)
             
+    def visit_call(self, expr):
+        callee = self.evaluate(expr.callee)
+        arguments = [self.evaluate(argument) for argument in expr.arguments]
+
+        if not isinstance(callee, SNEKCallable):
+            raise Error(ErrorType.RUNTIME_ERROR, expr.paren, f"Object {callee} is not a function.")
+        if callee.arity() != len(arguments):
+            raise Error(ErrorType.RUNTIME_ERROR, expr.paren, f"Expected {callee.arity()} arguments, got {len(arguments)}")
+
+        return callee.call(self, arguments)
+            
     def visit_identifier(self, expr):
         return self.env.get(expr.name)
     
     def visit_assign(self, expr):
         value = self.evaluate(expr.value)
-        self.env.assign(expr.name, value)
+        self.env.assign(expr.name.src, value)
         return value
             
     def repr(self, value):

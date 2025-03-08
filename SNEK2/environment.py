@@ -14,10 +14,10 @@ class Environment:
         return self.values[name.src]
     
     def assign(self, name, value):
-        if name.src not in self.values:
+        if name not in self.values:
             if self.parent is not None:
                 return self.parent.assign(name, value)
-        self.values[name.src] = value
+        self.values[name] = value
     
     def delete(self, name):
         if name.src not in self.values:
