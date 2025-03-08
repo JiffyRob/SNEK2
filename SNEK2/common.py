@@ -85,16 +85,11 @@ class Token:
 
 
 class Error(Exception):
-    def __init__(self, type, token, message):
+    def __init__(self, type, message, src, line):
         self.type = type
-        self.token = token
         self.message = message
+        self.line = line
+        self.src = src
 
     def __str__(self):
-        if isinstance(self.token, Token):
-            src = self.token.src
-            line = self.token.line
-        else:
-            src = self.token
-            line = self.message
-        return f"{self.type.value} at line {line} (\"{src}\"):\n{self.message}"
+        return f"{self.type.value} at line {self.line}.\n'{self.src}':\n{self.message}"

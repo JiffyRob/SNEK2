@@ -40,7 +40,7 @@ class Parser:
     def consume(self, type, message):
         if self.check(type):
             return self.advance()
-        raise Error(ErrorType.PARSE_ERROR, self.peek(), message)
+        raise Error(ErrorType.PARSE_ERROR, message, self.previous().src, self.previous().line)
     
     def synchonize(self):
         self.valid = False
@@ -140,7 +140,7 @@ class Parser:
                 name = expr.token
                 return Assign(name, name, value)
 
-            raise Error(ErrorType.PARSE_ERROR, equals, "Invalid assignment target.")
+            raise Error(ErrorType.PARSE_ERROR, "Invalid assignment target.", equals.src, equals.line)
         return expr
     
     def _or(self):
@@ -253,7 +253,7 @@ class Parser:
             if self.match(TokenType.IDENTIFIER):
                 return Identifier(token, self.previous())
         
-        raise Error(ErrorType.PARSE_ERROR, self.peek(), "Expect expression.")
+        raise Error(ErrorType.PARSE_ERROR, "Expect expression.", token.src, token.line)
     
     def desugar_fstring(self, token):
         expressions = []
@@ -282,6 +282,6 @@ class Parser:
     def parse_expression(self):
         expr = self.expression()
         if not self.is_at_end():
-            raise Error(ErrorType.PARSE_ERROR, self.advance(), "Expected 1 expression and nothing more")
+            raise Error(ErrorType.PARSE_ERROR, "Expected 1 expression and nothing more", expr.src, expr.line)
         
         return expr

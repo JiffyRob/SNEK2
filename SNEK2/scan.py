@@ -83,7 +83,7 @@ class Scanner:
             self.advance()
 
         if self.is_at_end():
-            raise Error(ErrorType.SCAN_ERROR, "Unterminated string", self.line)
+            raise Error(ErrorType.SCAN_ERROR, "Unterminated string", self.previous(), self.line)
 
         self.advance()
 
@@ -154,13 +154,13 @@ class Scanner:
             self.advance()
             
         if self.is_at_end():
-            raise Error(ErrorType.SCAN_ERROR, "Unterminated string", self.line)
+            raise Error(ErrorType.SCAN_ERROR, "Unterminated string", self.previous(), self.line)
 
         self.add_token(TokenType.FSTRING_END)
         self.advance()
                     
         if self.is_at_end():
-            raise Error(ErrorType.SCAN_ERROR, "Unterminated string", self.line)
+            raise Error(ErrorType.SCAN_ERROR, "Unterminated string", self.previous(), self.line)
 
     def handle_number(self):
         while self.peek().isdigit():
@@ -182,16 +182,6 @@ class Scanner:
             self.add_token(self.KEYWORDS[text])
         else:
             self.add_token(TokenType.IDENTIFIER, self.source[self.start:self.current])
-
-    def peek_identifier(self):
-        current = self.current
-        while is_alpha_or_underscore(self.source[current]):
-            current += 1
-
-        text = self.source[self.start:current]
-        if text in self.KEYWORDS:
-            return self.KEYWORDS[text]
-        return TokenType.IDENTIFIER
 
     def scan_token(self):
         c = self.advance()
@@ -250,64 +240,8 @@ class Scanner:
             case _ if is_alpha_or_underscore(c):
                 return self.handle_identifier()
             case _:
-                raise Error(ErrorType.SCAN_ERROR, self.previous(), f"Unexpected character ({self.previous()})")
+                raise Error(ErrorType.SCAN_ERROR, f"Unexpected character", self.previous(), self.line)
         return c
-    
-    def peek_token(self):
-        c = self.peek()
-        match c:
-            case "(":
-                return TokenType.LEFT_PAREN
-            case ")":
-                return TokenType.RIGHT_PAREN
-            case "{":
-                return TokenType.LEFT_BRACE
-            case "}":
-                return TokenType.RIGHT_BRACE
-            case ",":
-                return TokenType.COMMA
-            case ".":
-                return TokenType.DOT
-            case "-":
-                return TokenType.MINUS
-            case "+":
-                return TokenType.PLUS
-            case ";":
-                return TokenType.SEMICOLON
-            case "*":
-                return TokenType.STAR
-            case "!" if self.match("="):
-                return TokenType.BANG_EQUAL
-            case "!":
-                return TokenType.BANG
-            case "=" if self.match("="):
-                return TokenType.EQUAL_EQUAL
-            case "=":
-                return TokenType.EQUAL
-            case "<" if self.match("="):
-                return TokenType.LESS_EQUAL
-            case "<":
-                return TokenType.LESS
-            case ">" if self.match("="):
-                return TokenType.GREATER_EQUAL
-            case ">":
-                return TokenType.GREATER
-            case "/":
-                return TokenType.SLASH
-            case " " | "\r" | "\t":
-                pass
-            case "\n":
-                self.line += 1
-            case '"':
-                return TokenType.STRING
-            case 'f' if self.match('"'):
-                return TokenType.FSTRING
-            case "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9":
-                return TokenType.NUMBER
-            case _ if is_alpha_or_underscore(c):
-                return TokenType.IDENTIFIER
-            case _:
-                raise Error(ErrorType.SCAN_ERROR, self.previous(), f"Unexpected character ({self.previous()})")
 
     def is_at_end(self):
         return self.current >= len(self.source)

@@ -10,7 +10,7 @@ class Environment:
         if name.src not in self.values:
             if self.parent is not None:
                 return self.parent.get(name)
-            raise Error(ErrorType.UNBOUND_VARIABLE_ERROR, name, f"Variable \"{name.src}\" not defined")
+            raise Error(ErrorType.UNBOUND_VARIABLE_ERROR, f"Variable not defined", name.src, name.line)
         return self.values[name.src]
     
     def assign(self, name, value):
@@ -21,7 +21,7 @@ class Environment:
     
     def delete(self, name):
         if name.src not in self.values:
-            raise Error(ErrorType.UNBOUND_VARIABLE_ERROR, name, f"Variable \"{name.src}\" not defined")
+            raise Error(ErrorType.UNBOUND_VARIABLE_ERROR, f"Variable not defined", name.src, name.line)
         del self.values[name.src]
 
     

@@ -29,7 +29,7 @@ class Interpreter:
         try:
             return op(val)
         except TypeError:
-            raise Error(ErrorType.TYPE_ERROR, None, f"Operation unsupported for type {type(v)}")
+            raise Error(ErrorType.TYPE_ERROR, f"Operation unsupported for type {type(v)}", v.src, v.line)
     
     def operate_binary(self, expr, op):
         val1 = self.evaluate(expr.left)
@@ -37,7 +37,7 @@ class Interpreter:
         try:
             return op(val1, val2)
         except TypeError:
-            raise Error(ErrorType.TYPE_ERROR, expr.operator, f"Operation unsupported between types {type(val1)} and {type(val2)}")
+            raise Error(ErrorType.TYPE_ERROR, f"Operation unsupported between types {type(val1)} and {type(val2)}", expr.operator.src, expr.operator.line)
 
     def evaluate(self, expr):
         return expr.accept(self)
@@ -133,9 +133,9 @@ class Interpreter:
         arguments = [self.evaluate(argument) for argument in expr.arguments]
 
         if not isinstance(callee, SNEKCallable):
-            raise Error(ErrorType.RUNTIME_ERROR, expr.paren, f"Object {callee} is not a function.")
+            raise Error(ErrorType.RUNTIME_ERROR, f"Object {callee} is not a function.", expr.paren.src, expr.paren.line)
         if callee.arity() != len(arguments):
-            raise Error(ErrorType.RUNTIME_ERROR, expr.paren, f"Expected {callee.arity()} arguments, got {len(arguments)}")
+            raise Error(ErrorType.RUNTIME_ERROR, f"Expected {callee.arity()} arguments, got {len(arguments)}", expr.paren.src, expr.paren.line)
 
         return callee.call(self, arguments)
             
