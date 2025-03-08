@@ -1,10 +1,13 @@
 from .common import TokenType, ErrorType, Token, Error
 
+
 def is_alphanumeric_or_underscore(c):
     return c.isalnum() or c == "_"
 
+
 def is_alpha_or_underscore(c):
     return c.isalpha() or c == "_"
+
 
 class Scanner:
     _cache = {}
@@ -43,12 +46,10 @@ class Scanner:
         return self.source[self.current - 1]
 
     def add_token(self, token_type, literal=None):
-        src = self.source[self.start:self.current]
+        src = self.source[self.start : self.current]
         if token_type == TokenType.EOF:
             src = "<EOF>"
-        self.tokens.append(
-            Token(token_type, src, literal, self.line)
-        )
+        self.tokens.append(Token(token_type, src, literal, self.line))
 
     def match(self, expected):
         if self.is_at_end():
@@ -57,7 +58,7 @@ class Scanner:
             return False
         self.current += 1
         return True
-    
+
     def previous(self):
         assert self.current > 0
         return self.source[self.current - 1]
@@ -75,15 +76,17 @@ class Scanner:
         while not self.is_at_end():
             if self.peek() == "\n":
                 self.line += 1
-            if self.peek() == "\"" and not escaped:
+            if self.peek() == '"' and not escaped:
                 break
             escaped = False
-            if self.peek() == '\\':
+            if self.peek() == "\\":
                 escaped = True
             self.advance()
 
         if self.is_at_end():
-            raise Error(ErrorType.SCAN_ERROR, "Unterminated string", self.previous(), self.line)
+            raise Error(
+                ErrorType.SCAN_ERROR, "Unterminated string", self.previous(), self.line
+            )
 
         self.advance()
 
@@ -114,7 +117,7 @@ class Scanner:
                     continue
             escaped += char
             current += 1
-                    
+
         self.add_token(TokenType.STRING, escaped)
 
     def handle_fstring(self):
@@ -131,7 +134,7 @@ class Scanner:
                 self.add_token(TokenType.FSTRING_PART, escaped_string)
                 self.advance()
                 escaped_string = ""
-                while (self.peek() != "}"):
+                while self.peek() != "}":
                     self.start = self.current
                     self.scan_token()
 
@@ -152,15 +155,19 @@ class Scanner:
 
                     escaped_string += char
             self.advance()
-            
+
         if self.is_at_end():
-            raise Error(ErrorType.SCAN_ERROR, "Unterminated string", self.previous(), self.line)
+            raise Error(
+                ErrorType.SCAN_ERROR, "Unterminated string", self.previous(), self.line
+            )
 
         self.add_token(TokenType.FSTRING_END)
         self.advance()
-                    
+
         if self.is_at_end():
-            raise Error(ErrorType.SCAN_ERROR, "Unterminated string", self.previous(), self.line)
+            raise Error(
+                ErrorType.SCAN_ERROR, "Unterminated string", self.previous(), self.line
+            )
 
     def handle_number(self):
         while self.peek().isdigit():
@@ -171,17 +178,17 @@ class Scanner:
             while self.peek().isdigit():
                 self.advance()
 
-        self.add_token(TokenType.NUMBER, float(self.source[self.start:self.current]))
+        self.add_token(TokenType.NUMBER, float(self.source[self.start : self.current]))
 
     def handle_identifier(self):
         while is_alphanumeric_or_underscore(self.peek()):
             self.advance()
 
-        text = self.source[self.start:self.current]
+        text = self.source[self.start : self.current]
         if text in self.KEYWORDS:
             self.add_token(self.KEYWORDS[text])
         else:
-            self.add_token(TokenType.IDENTIFIER, self.source[self.start:self.current])
+            self.add_token(TokenType.IDENTIFIER, self.source[self.start : self.current])
 
     def scan_token(self):
         c = self.advance()
@@ -233,14 +240,19 @@ class Scanner:
                 self.line += 1
             case '"':
                 self.handle_string()
-            case 'f' if self.match('"'):
+            case "f" if self.match('"'):
                 self.handle_fstring()
             case "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9":
                 self.handle_number()
             case _ if is_alpha_or_underscore(c):
                 return self.handle_identifier()
             case _:
-                raise Error(ErrorType.SCAN_ERROR, f"Unexpected character", self.previous(), self.line)
+                raise Error(
+                    ErrorType.SCAN_ERROR,
+                    f"Unexpected character",
+                    self.previous(),
+                    self.line,
+                )
         return c
 
     def is_at_end(self):

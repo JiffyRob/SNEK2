@@ -5,10 +5,10 @@ class SNEKCallable:
 
     async def call(self, interpreter, args):
         return self.func(*args)
-    
+
     def arity(self):
         return self._arity
-    
+
 
 class AsyncSNEKCallable(SNEKCallable):
     async def call(self, interpreter, args):

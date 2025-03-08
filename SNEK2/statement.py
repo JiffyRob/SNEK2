@@ -1,7 +1,9 @@
 # AUTO GENERATED FILE
 
+
 class Statement:
     pass
+
 
 class Expression(Statement):
     def __init__(self, token, expression):
@@ -11,6 +13,7 @@ class Expression(Statement):
     def accept(self, visitor):
         return visitor.visit_expression(self)
 
+
 class Print(Statement):
     def __init__(self, token, expression):
         self.token = token
@@ -18,6 +21,7 @@ class Print(Statement):
 
     def accept(self, visitor):
         return visitor.visit_print(self)
+
 
 class If(Statement):
     def __init__(self, token, condition, if_branch, else_branch):
@@ -29,6 +33,7 @@ class If(Statement):
     def accept(self, visitor):
         return visitor.visit_if(self)
 
+
 class While(Statement):
     def __init__(self, token, condition, body):
         self.token = token
@@ -38,6 +43,7 @@ class While(Statement):
     def accept(self, visitor):
         return visitor.visit_while(self)
 
+
 class Block(Statement):
     def __init__(self, token, statements):
         self.token = token
@@ -45,6 +51,7 @@ class Block(Statement):
 
     def accept(self, visitor):
         return visitor.visit_block(self)
+
 
 class Switch(Statement):
     def __init__(self, token, expr, cases):
@@ -54,4 +61,3 @@ class Switch(Statement):
 
     def accept(self, visitor):
         return visitor.visit_switch(self)
-

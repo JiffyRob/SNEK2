@@ -1,7 +1,9 @@
 # AUTO GENERATED FILE
 
+
 class Expression:
     pass
+
 
 class Binary(Expression):
     def __init__(self, token, left, operator, right):
@@ -13,6 +15,7 @@ class Binary(Expression):
     def accept(self, visitor):
         return visitor.visit_binary(self)
 
+
 class Call(Expression):
     def __init__(self, token, callee, paren, arguments):
         self.token = token
@@ -23,6 +26,7 @@ class Call(Expression):
     def accept(self, visitor):
         return visitor.visit_call(self)
 
+
 class Grouping(Expression):
     def __init__(self, token, expression):
         self.token = token
@@ -30,6 +34,7 @@ class Grouping(Expression):
 
     def accept(self, visitor):
         return visitor.visit_grouping(self)
+
 
 class Literal(Expression):
     def __init__(self, token, value):
@@ -39,6 +44,7 @@ class Literal(Expression):
     def accept(self, visitor):
         return visitor.visit_literal(self)
 
+
 class FString(Expression):
     def __init__(self, token, value):
         self.token = token
@@ -46,6 +52,7 @@ class FString(Expression):
 
     def accept(self, visitor):
         return visitor.visit_fstring(self)
+
 
 class Logical(Expression):
     def __init__(self, token, left, operator, right):
@@ -57,6 +64,7 @@ class Logical(Expression):
     def accept(self, visitor):
         return visitor.visit_logical(self)
 
+
 class Unary(Expression):
     def __init__(self, token, operator, right):
         self.token = token
@@ -66,6 +74,7 @@ class Unary(Expression):
     def accept(self, visitor):
         return visitor.visit_unary(self)
 
+
 class Identifier(Expression):
     def __init__(self, token, name):
         self.token = token
@@ -73,6 +82,7 @@ class Identifier(Expression):
 
     def accept(self, visitor):
         return visitor.visit_identifier(self)
+
 
 class Assign(Expression):
     def __init__(self, token, name, value):
@@ -82,4 +92,3 @@ class Assign(Expression):
 
     def accept(self, visitor):
         return visitor.visit_assign(self)
-

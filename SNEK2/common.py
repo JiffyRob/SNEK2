@@ -1,6 +1,7 @@
 from enum import Enum, auto
 from dataclasses import dataclass
 
+
 class TokenType(Enum):
     # single character
     LEFT_PAREN = auto()
@@ -55,7 +56,7 @@ class TokenType(Enum):
     WHILE = auto()
     SWITCH = auto()
     CASE = auto()
-    
+
     # EOF
     EOF = auto()
 

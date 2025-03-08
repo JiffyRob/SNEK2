@@ -7,11 +7,12 @@ import operator
 from time import time
 from random import randint
 
+
 class Interpreter:
     def __init__(self, api=None):
         if api is None:
             api = {}
-        
+
         api = {
             "time": SNEKCallable(time, 0),
             "str": SNEKCallable(str, 1),
@@ -33,25 +34,35 @@ class Interpreter:
 
     async def is_truthy(self, value):
         return bool(await self.evaluate(value))
-    
+
     async def operate_unary(self, v, op):
         val = await self.evaluate(v)
         try:
             return op(val)
         except TypeError:
-            raise Error(ErrorType.TYPE_ERROR, f"Operation unsupported for type {type(v)}", v.src, v.line)
-    
+            raise Error(
+                ErrorType.TYPE_ERROR,
+                f"Operation unsupported for type {type(v)}",
+                v.src,
+                v.line,
+            )
+
     async def operate_binary(self, expr, op):
         val1 = await self.evaluate(expr.left)
         val2 = await self.evaluate(expr.right)
         try:
             return op(val1, val2)
         except TypeError:
-            raise Error(ErrorType.TYPE_ERROR, f"Operation unsupported between types {type(val1)} and {type(val2)}", expr.operator.src, expr.operator.line)
+            raise Error(
+                ErrorType.TYPE_ERROR,
+                f"Operation unsupported between types {type(val1)} and {type(val2)}",
+                expr.operator.src,
+                expr.operator.line,
+            )
 
     async def evaluate(self, expr):
         return await expr.accept(self)
-    
+
     async def execute(self, stmt):
         await stmt.accept(self)
 
@@ -63,7 +74,7 @@ class Interpreter:
                 await self.execute(stmt)
         finally:
             self.env = previous
-    
+
     async def visit_expression(self, stmt):
         await self.evaluate(stmt.expression)
 
@@ -74,7 +85,7 @@ class Interpreter:
             await self.execute(stmt.else_branch)
 
     async def visit_while(self, stmt):
-        while (await self.is_truthy(stmt.condition)):
+        while await self.is_truthy(stmt.condition):
             await self.execute(stmt.body)
 
     async def visit_switch(self, stmt):
@@ -97,24 +108,28 @@ class Interpreter:
         left = await self.evaluate(expr.left)
 
         if expr.operator == TokenType.OR:
-            if await self.is_truthy(left): 
+            if await self.is_truthy(left):
                 return left
         else:
             if not await self.is_truthy(left):
                 return left
 
         return await self.evaluate(expr.right)
-    
+
     async def visit_grouping(self, expr):
         return await self.evaluate(expr.expression)
-    
+
     async def visit_unary(self, expr):
         match expr.operator.type:
             case TokenType.BANG:
-                return await self.operate_unary(await self.evaluate(expr.right), operator.not_)
+                return await self.operate_unary(
+                    await self.evaluate(expr.right), operator.not_
+                )
             case TokenType.MINUS:
-                return await self.operate_unary(await self.evaluate(expr.right), operator.neg)
-            
+                return await self.operate_unary(
+                    await self.evaluate(expr.right), operator.neg
+                )
+
     async def visit_binary(self, expr):
         match expr.operator.type:
             case TokenType.GREATER:
@@ -137,31 +152,41 @@ class Interpreter:
                 return await self.operate_binary(expr, operator.ne)
             case TokenType.EQUAL_EQUAL:
                 return await self.operate_binary(expr, operator.eq)
-            
+
     async def visit_call(self, expr):
         callee = await self.evaluate(expr.callee)
         arguments = [(await self.evaluate(argument)) for argument in expr.arguments]
 
         if not isinstance(callee, SNEKCallable):
-            raise Error(ErrorType.RUNTIME_ERROR, f"Object {callee} is not a function.", expr.paren.src, expr.paren.line)
+            raise Error(
+                ErrorType.RUNTIME_ERROR,
+                f"Object {callee} is not a function.",
+                expr.paren.src,
+                expr.paren.line,
+            )
         if callee.arity() != len(arguments):
-            raise Error(ErrorType.RUNTIME_ERROR, f"Expected {callee.arity()} arguments, got {len(arguments)}", expr.paren.src, expr.paren.line)
+            raise Error(
+                ErrorType.RUNTIME_ERROR,
+                f"Expected {callee.arity()} arguments, got {len(arguments)}",
+                expr.paren.src,
+                expr.paren.line,
+            )
 
         return await callee.call(self, arguments)
-            
+
     async def visit_identifier(self, expr):
         return self.env.get(expr.name)
-    
+
     async def visit_assign(self, expr):
         value = await self.evaluate(expr.value)
         self.env.assign(expr.name.src, value)
         return value
-            
+
     def repr(self, value):
         if value is None:
             return "nil"
         return str(value)
-            
+
     async def interpret(self, statements):
         for stmt in statements:
             await self.execute(stmt)

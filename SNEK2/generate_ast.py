@@ -22,7 +22,8 @@ def define_ast(output_dir, basename, types):
             class_name = class_name.strip()
             fields = [field.strip() for field in fields.split(",")]
             f.write(define_type(basename, class_name, fields))
-    
+
+
 EXPR_TYPES = [
     "Binary : left, operator, right",
     "Call : callee, paren, arguments",
