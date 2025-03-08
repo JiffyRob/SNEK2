@@ -256,11 +256,9 @@ class Parser:
         raise Error(ErrorType.PARSE_ERROR, self.peek(), "Expect expression.")
     
     def desugar_fstring(self, token):
-        print("desugar")
         expressions = []
         while not self.check(TokenType.FSTRING_END):
             current_token = self.peek()
-            print(current_token)
             if current_token.type == TokenType.FSTRING_PART:
                 self.advance()
                 expressions.append(Literal(current_token, current_token.literal))
