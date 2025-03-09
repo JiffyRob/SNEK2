@@ -1,4 +1,7 @@
 # comment
+
+print(sum(2));
+
 print(2 + 2);
 
 print "waiting";

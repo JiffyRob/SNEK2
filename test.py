@@ -1,6 +1,6 @@
 import asyncio, time
 
-from SNEK2 import SNEKCallable, SNEKProgram
+from SNEK2 import SNEKCallable, SNEKProgram, Arity
 
 running = True
 
@@ -25,6 +25,7 @@ async def run_script():
         {
             "barf": SNEKCallable(lambda: print("Eww, I just barfed!"), 0),
             "get_test": SNEKCallable(lambda: test(), 0),
+            "sum": SNEKCallable(lambda *args: sum(args), Arity(2, None)),
         },
     ).run_async()
     global running
