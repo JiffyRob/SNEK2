@@ -10,6 +10,7 @@ class Arity:
             return True
         if value > self.max:
             return False
+        return True
         
     def __neq__(self, value):
         return not self.__eq__(value)
