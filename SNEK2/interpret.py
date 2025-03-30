@@ -123,11 +123,11 @@ class Interpreter:
         match expr.operator.type:
             case TokenType.BANG:
                 return await self.operate_unary(
-                    await self.evaluate(expr.right), operator.not_
+                    expr.right, operator.not_
                 )
             case TokenType.MINUS:
                 return await self.operate_unary(
-                    await self.evaluate(expr.right), operator.neg
+                    expr.right, operator.neg
                 )
 
     async def visit_binary(self, expr):
