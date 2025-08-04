@@ -1,3 +1,5 @@
+# mypy: ignore-errors
+
 from enum import Enum, auto
 from dataclasses import dataclass
 

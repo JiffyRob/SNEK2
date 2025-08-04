@@ -7,7 +7,7 @@ running = True
 
 class test:
     def __str__(self):
-        return "I'm a boogerface!!!!"
+        return "first callback"
 
 
 async def run_game():
@@ -23,7 +23,7 @@ async def run_script():
     await SNEKProgram(
         source,
         {
-            "barf": SNEKCallable(lambda: print("Eww, I just barfed!"), 0),
+            "ham": SNEKCallable(lambda: print("another callback"), 0),
             "get_test": SNEKCallable(lambda: test(), 0),
             "sum": SNEKCallable(lambda *args: sum(args), Arity(2, None)),
         },

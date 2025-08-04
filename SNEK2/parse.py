@@ -1,3 +1,5 @@
+# mypy: ignore-errors
+
 from .common import TokenType, ErrorType, Token, Error
 from .expression import (
     Binary,

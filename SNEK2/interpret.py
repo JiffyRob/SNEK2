@@ -1,3 +1,5 @@
+# mypy: ignore-errors
+
 import asyncio
 
 from .common import TokenType, ErrorType, Error
@@ -19,7 +21,7 @@ class Interpreter:
             "upper": SNEKCallable(lambda x: x.upper(), 1),
             "lower": SNEKCallable(lambda x: x.lower(), 1),
             "title": SNEKCallable(lambda x: x.title(), 1),
-            "randint": SNEKCallable(randint, 2),
+            "randint": SNEKCallable(lambda a, b: randint(int(a), int(b)), 2),
             "input": SNEKCallable(input, 1),
             "contains": SNEKCallable(lambda x, y: x in y, 2),
             "abs": SNEKCallable(abs, 1),

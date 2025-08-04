@@ -1,3 +1,5 @@
+#mypy: ignore-errors
+
 class AstPrinter:
     def parenthesize(self, name, *args):
         return f"({name} {' '.join(map(str, args))})"

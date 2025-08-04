@@ -1,7 +1,6 @@
 # comment
 
-print(sum(2));
-
+print(sum(2, 2, 2));
 print(2 + 2);
 
 print "waiting";
@@ -52,4 +51,4 @@ switch a {  # braces here are mandatory
 print "switch done";
 
 print f"Let's roll a d20! {randint(1, 20)}";
-barf();
+ham();
