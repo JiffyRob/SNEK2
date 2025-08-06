@@ -14,7 +14,7 @@ def define_type(basename, class_name, fields):
 def define_ast(output_dir, basename, types):
     path = f"{output_dir}/{basename.lower()}.py"
     with open(path, "w") as f:
-        f.write("# mypy: ignore\n\n")
+        f.write("# type: ignore\n\n")
         f.write("# AUTO GENERATED FILE\n\n")
         f.write(f"class {basename}:\n")
         f.write("    pass\n\n")

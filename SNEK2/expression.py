@@ -1,4 +1,3 @@
-# mypy: ignore-errors
 # AUTO GENERATED FILE
 
 class Expression:

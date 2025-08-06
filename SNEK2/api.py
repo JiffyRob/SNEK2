@@ -2,6 +2,7 @@ from typing import Callable, Any, Sequence
 
 from . import interfaces
 
+
 class Arity(interfaces.Arity):
     def __init__(self, min: int=0, max: int | None=None) -> None:
         self.min = min
@@ -26,6 +27,10 @@ class Arity(interfaces.Arity):
         if self.max is None:
             return f"arity (between {self.min} and inf)"
         return f"arity (between {self.min} and {max})"
+    
+    def __repr__(self) -> str:
+        return str(self)
+
 
 class SNEKCallable:
     def __init__(self, func: Callable[..., Any], arity: int | Arity):
